@@ -1,0 +1,65 @@
+
+.nav-menu{
+    display: flex;
+}
+
+.nav-menu li {       /* Style each list item in the nav-menu class list */
+    padding: 0 1rem;
+}
+
+.nav-menu a {    /* We are using Link to link pages. To style these we use a just like we use a href to link to a different page.  */
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    position: fixed; 
+    height: 90px;
+    width: 100%;
+    z-index: 10;
+}
+.header-bg {
+    background-color: rgba(0,0,0,0.85);
+    transition: 0.5s;
+}
+
+.navdropdown { /*We only want the nav drop down for mobile NOT on desktop */
+    display:none;
+}
+
+@media screen and (max-width: 1040px){ /* For media screen (phones), we want navbar to be displayed column not row */
+    .nav-menu {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0,0,0.9);
+        /* just having above moves the 'Portfolio' header down as well we want it to stay top left corner so following code is needed */
+        position: absolute;
+        top: 0;
+        left: -100%; /*At first the nav menu will be hidden until user clicks on the drop down bar. That's why initally we have it to left: -100% */
+        z-index: -3;
+        transition: 0.3s;
+    }
+    .nav-menu.active { /* Once user clicks on the dropdown, nav menu is shown */
+        left: 0;
+    }
+
+    .nav-menu li { /* Without padding the links are way too close to each other */
+        padding: 1rem 0;
+    }
+    
+    .nav-menu li a{
+        font-size: 32px;
+    }
+
+    .navdropdown {  /*We only want the nav drop down for mobile NOT on desktop */
+        display:initial;
+    }
+}
+
