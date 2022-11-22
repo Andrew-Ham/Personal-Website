@@ -1,11 +1,10 @@
 import "./ContactFormStyles.css"
 import {FaLinkedin} from "react-icons/fa";
 
-import React, {useState, useRef} from 'react'
+import React, {useState} from 'react'
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import emailjs from '@emailjs/browser'
-
+import axios from "axios";
 
 
 const ContactForm = () => {
@@ -14,11 +13,6 @@ const ContactForm = () => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const form = useRef();
-  const service = process.env.REACT_APP_SERVICE_ID;
-  const template = process.env.REACT_APP_TEMPLATE_ID;
-  const user = process.env.REACT_APP_USER_ID;
 
   /*
     toast is from React toastify which allows you to add notifications to app!
@@ -30,14 +24,11 @@ const ContactForm = () => {
     }
     try {
       setLoading(true);
-      emailjs.sendForm(service, template, form.current, user)
-      .then((result) => {
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
+      const { data } = await axios.post(`/api/email`, {
+        name, email, subject, message
       });
       setLoading(false);
-      toast.success("Message sent successfully! I'll be in touch soon! Thank you!");
+      toast.success(data.message);
 
     } catch (err) {
       setLoading(false);
@@ -56,26 +47,15 @@ const ContactForm = () => {
         </div>
         <p> Or fill out the form below and I will do my best to respond via email!</p>
         </div>
-        {/* <form ref={form} onSubmit={sendEmail}>
-          <label>Your name</label>
-          <input type="text" name="user_name" />
-          <label>Email</label>
-          <input type="email" name="user_email" />
-          <label>Subject</label>
-          <input type="text" name="user_subject" />
-          <label>Message</label>
-          <textarea name="message" row="7" placeholder="Please enter your message here"/>
-          <input type="submit" value="Send" />
-        </form> */}
-        <form ref={form} onSubmit={submitHandler}>
+        <form onSubmit={submitHandler}>
             <label>Your name</label>  
-            <input onChange = {(e) => setName(e.target.value)} type = "text" name="user_name"></input>
+            <input onChange = {(e) => setName(e.target.value)} type = "text" ></input>
             <label>Email</label>
-            <input onChange = {(e) => setEmail(e.target.value)} type = "email" name="user_email"></input>
+            <input onChange = {(e) => setEmail(e.target.value)} type = "email"></input>
             <label>Subject</label>
-            <input onChange = {(e) => setSubject(e.target.value)} type = "text" name = "user_subject"></input>
+            <input onChange = {(e) => setSubject(e.target.value)} type = "text"></input>
             <label>Message</label>
-            <textarea row="7" placeholder="Please enter your message here" onChange = {(e) => setMessage(e.target.value)} name = "user_message"/>
+            <textarea row="7" placeholder="Please enter your message here" onChange = {(e) => setMessage(e.target.value)}/>
             <button disabled = {loading} type = "submit" className = "btn">{loading ? 'Sending information...' : 'Submit'}</button>
 
             
